@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<insert id="insert" parameterType="BoardVo">
+	<![CDATA[
+	    INSERT INTO BOARD
+	    values (seq_board_no.nextval,
+	             #{title},
+	            #{content},
+	                     0,
+	               sysdate,
+	             #{user_no}  
+	     )
+        ]]>
+	</insert>
+
+	<select id="board.getArticles" resultType="BoardVo">
+	<![CDATA[
+	     SELECT no, title, content, user_no 
+	     FROM board 
+	     WHERE no=#{no}
+        ]]>
+	</select>
+
+	<update id="increaseHit" parameterType="int">
+	<![CDATA[
+	     UPDATE board
+	     SET hit = hit+1
+	     WHERE no=#{no}
+	   ]]>
+	</update>
+
+	<update id="update" parameterType="BoardVo">
+	<![CDATA[
+	     UPDATE board
+	     SET title=#{title},
+	         content=#{content}
+	     WHERE no=#{no}
+	   ]]>
+	</update>
+
+	<delete id="delete" parameterType="map"> 
+        <![CDATA[ 
+        DELETE FROM board
+        where no=#{no}
+         ]]>
+	</delete>
+
+    <select id="search" parameterType="String" resultType="BoardVo">
+	<![CDATA[
+	    SELECT b.no,
+	           b.title,
+	           u.name,
+	           b.hit,
+	           b.reg_date,
+	           b.user_no
+	     FROM board b, users u
+	     WHERE b.user_no = u.no
+	     AND b.title LIKE #{kwd}
+	     ORDER BY b.no DESC
+        ]]>
+	</select>
+    
+
+	<select id="list" resultType="BoardVo">
+	<![CDATA[
+	   SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no
+	   FROM board b, users u
+	   WHERE b.user_no=u.no
+        ]]>
+	</select>
+
+
+
+</mapper>

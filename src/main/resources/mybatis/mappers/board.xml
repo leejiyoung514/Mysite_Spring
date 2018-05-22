@@ -41,37 +41,85 @@
 	   ]]>
 	</update>
 
-	<delete id="delete" parameterType="map"> 
+	<delete id="delete" parameterType="int"> 
         <![CDATA[ 
         DELETE FROM board
         where no=#{no}
          ]]>
 	</delete>
-
-    <select id="search" parameterType="String" resultType="BoardVo">
+	
+	<select id="countArticle" parameterType="String" resultType="int">
 	<![CDATA[
-	    SELECT b.no,
-	           b.title,
-	           u.name,
-	           b.hit,
-	           b.reg_date,
-	           b.user_no
-	     FROM board b, users u
-	     WHERE b.user_no = u.no
-	     AND b.title LIKE #{kwd}
-	     ORDER BY b.no DESC
+     	SELECT count(*) 
+     	FROM board
+	 ]]>
+	</select>
+	
+	
+   <select id="searchList" parameterType="map" resultType="BoardVo">
+	<![CDATA[
+	   SELECT B.rnum, B.no, B.title, B.name as user_name, B.hit, B.reg_date, B.user_no 
+	   FROM  
+			(SELECT rownum AS rnum, A.no, A.title, A.name, A.hit, A.reg_date, A.user_no
+			 FROM (SELECT b.no, 
+					      b.title,   
+					      u.name,  
+					      b.hit, 
+				          b.reg_date, 
+					      b.user_no  
+				   FROM board b, users u  
+				   WHERE b.user_no = u.no  
+				   AND b.title LIKE '%' || #{kwd} || '%'
+				   ORDER BY NO DESC) A   
+			 WHERE rownum <= #{end} ) B  
+	    WHERE B.rnum >= #{start} 
         ]]>
 	</select>
-    
 
-	<select id="list" resultType="BoardVo">
+	
+   <select id="listAll"  parameterType="map"  resultType="BoardVo">
 	<![CDATA[
-	   SELECT b.no, b.title, u.name, b.hit, b.reg_date, b.user_no
-	   FROM board b, users u
-	   WHERE b.user_no=u.no
+	   SELECT B.rnum, B.no, B.title, B.name as user_name, B.hit, B.reg_date, B.user_no 
+	   FROM  
+			(SELECT rownum AS rnum, A.no, A.title, A.name, A.hit, A.reg_date, A.user_no
+			 FROM (SELECT b.no, 
+					      b.title,   
+					      u.name,  
+					      b.hit, 
+				          b.reg_date, 
+					      b.user_no  
+				   FROM board b, users u  
+				   WHERE b.user_no = u.no  
+				   ORDER BY NO DESC) A   
+			 WHERE rownum <= #{end} ) B  
+	    WHERE B.rnum >= #{start} 
         ]]>
-	</select>
+	</select> 
 
 
+    <sql id="search">
+      <choose>
+         <when test="search_option =='all'">
+             WHERE b.user_no = u.no AND 
+             (u.name LIKE '%'||#{kwd}||'%'
+              or b.content LIKE '%'||#{kwd}||'%'
+              or b.title LIKE '%'||#{kwd}||'%')
+         </when>
+         <otherwise>
+             WHERE b.user_no = u.no and
+             ${search_option} LIKE
+              '%'||#{kwd}||'%'
+         </otherwise> 
+      </choose>
+    </sql>
+
+
+
+
+
+
+	
 
 </mapper>
+
+

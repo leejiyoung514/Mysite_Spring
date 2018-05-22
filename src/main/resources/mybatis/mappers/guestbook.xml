@@ -15,12 +15,54 @@
           ]]> 	<!--getter 를 만들어내서 찾아서 치환이됨 , 그 일을 sqlsessionfactorybean이 치환해줌 -->
 	</insert>
 
+    <insert id="insert2" parameterType="GuestbookVo">
+	<selectKey keyProperty="no" resultType="int" order="BEFORE">	
+		select seq_guestbook_no.nextval from dual
+	</selectKey>
+	<![CDATA[	
+		INSERT INTO GUESTBOOK
+         VALUES ( #{no}, #{name}, #{password}, #{content}, SYSDATE )
+    	]]>
+   </insert>
+   
+    <select id="selectGuestBook" parameterType="int" resultType="GuestbookVo">
+	<![CDATA[
+	   SELECT NO, NAME, PASSWORD, CONTENT, REG_DATE
+	   FROM GUESTBOOK
+	   WHERE no=#{no}
+        ]]>
+	</select>
+   
 	<select id="list"  resultType="GuestbookVo">
 	<![CDATA[
 	   SELECT NO, NAME, PASSWORD, CONTENT, REG_DATE
 	   FROM GUESTBOOK
 	   ORDER BY NO DESC
         ]]>
+	</select>
+	
+	<select id="countArticle" parameterType="String" resultType="int">
+	<![CDATA[
+     	SELECT count(*) 
+     	FROM guestbook
+	 ]]>
+	</select>
+	
+	<select id="listAll"  parameterType="map"  resultType="GuestbookVo">
+	<![CDATA[
+	  SELECT B.rnum, B.no, B.name, B.password, B.content, B.reg_date
+      FROM
+           (SELECT rownum AS rnum, A.no, A.name, A.password, A.content, A.reg_date
+            FROM(SELECT NO, 
+                        NAME, 
+                        PASSWORD, 
+                        CONTENT, 
+                        REG_DATE
+                 FROM guestbook
+                 ORDER BY NO DESC) A
+            WHERE rownum <= #{end})B
+       WHERE B.rnum >= #{start}
+      ]]>
 	</select>
 
 

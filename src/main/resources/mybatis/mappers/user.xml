@@ -30,19 +30,10 @@
           ]]>
 	</select>
 
-    <select id="selectUserBylist" parameterType="map"
-		resultType="UserVo">    <!--던저준거 EmailVO -->
-       <![CDATA[  
-           SELECT NO, NAME
-           FROM USERS
-           WHERE EMAIL = #{email}
-           AND PASSWORD = #{password}
-          ]]>
-	</select>
     
      <select id="selectUserByno" parameterType="int" resultType="UserVo">    <!--던저준거 EmailVO -->
        <![CDATA[  
-           SELECT NAME, EMAIL, PASSWORD, GENDER 
+           SELECT NO, NAME, EMAIL, PASSWORD, GENDER 
            FROM USERS
            WHERE NO = #{no}
           ]]>
@@ -59,6 +50,16 @@
       WHERE NO=#{no}
       ]]>
     </update>
+    
+    
+    <select id="emailCheck" parameterType="String" resultType="String">    <!--던저준거 EmailVO -->
+       <![CDATA[  
+           SELECT EMAIL 
+           FROM USERS
+           WHERE email = #{email}
+          ]]>
+	</select>
+    
     
   
 </mapper>

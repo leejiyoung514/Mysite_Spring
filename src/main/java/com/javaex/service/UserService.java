@@ -28,6 +28,19 @@ public class UserService {
 	public int update(UserVo userVo) {
 		return userDao.update(userVo);
 	}
+
+	public Boolean emailCheck(String email) {
+		
+		email=userDao.emailCheck(email);
+		System.out.println("이메일체크"+email);
+		Boolean isExist=true;
+		if(email==null) {
+			isExist=true;
+		}else{
+			isExist=false;
+		}
+		return isExist;
+	}
 	
 	
 }

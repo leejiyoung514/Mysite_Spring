@@ -15,7 +15,7 @@ INCREMENT BY 1
 START WITH 1
 NOCACHE;
 
-INSERT INTO BOARD values(seq_board_no.nextval,'ÀÚ¹Ù','À¥ÆäÀÌÁö ¸¸µé±â',1,sysdate,1);
+INSERT INTO BOARD values(seq_board_no.nextval,'ï¿½Ú¹ï¿½','ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½',1,sysdate,1);
 
 select * from board;
 
@@ -43,6 +43,9 @@ order by no desc;
 SELECT title, content FROM board where no=1;
 
 SELECT no, title, content, user_no FROM board where no=1;
+
+
+
 
 SELECT B.rnum, B.no, B.title, B.name, B.hit, B.reg_date, B.user_no
 FROM

@@ -1,6 +1,8 @@
 package com.javaex.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ public class BoardDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	//글 삽입
+	//글 삽입기능
 	public int insert(BoardVo boardVo) {
 		return sqlSession.insert("board.insert", boardVo);
 	}
@@ -35,13 +37,36 @@ public class BoardDao {
 	public int delete(int no) {
 		return sqlSession.delete("board.delete", no);
 	}
+	//레코드 갯수 계산
+	public int countArticle() {
+		return sqlSession.selectOne("board.countArticle");
+	}
 	//글 검색하기
-	public List<BoardVo> search(String kwd){
-		return sqlSession.selectList("board.search",kwd);
+	public List<BoardVo> search(int start, int end, String kwd){
+		Map<String, Object> map=new HashMap<>();
+		map.put("start", start); //맵에 자료 저장
+		map.put("end", end);
+		map.put("kwd", kwd);
+		return sqlSession.selectList("board.searchList", map);
 	}
 	//리스트 출력
-	public List<BoardVo> getlist(){
-		return sqlSession.selectList("board.list");
+	public List<BoardVo> listAll(int start, int end){
+		Map<String, Object> map=new HashMap<>();
+		map.put("start", start); //맵에 자료 저장
+		map.put("end", end);
+		//mapper에는 2개 이상의 파라미터 값을 전달 할 수 없음 (vo 또는 map사용)
+		return sqlSession.selectList("board.listAll", map);
 	}
 	
+/*	//글 검색하기
+	public List<BoardVo> search(String kwd){
+		return sqlSession.selectList("board.search",kwd);
+	}*/
+	
+/*	
+	//리스트 출력
+		public List<BoardVo> getlist(){
+			return sqlSession.selectList("board.list");
+		}
+*/
 }

@@ -23,7 +23,7 @@ input[type="submit"] {
 	color:#fff;
 }
 
-input#kwd	{
+input#kwd, select#kwd{
 	width:250px;
 }
 
@@ -128,9 +128,10 @@ a.del	{
 	display:block;
 	width:20px;
 	height:20px; 
-	background:url(mysite_spring/assets/images/recycle.png") no-repeat 0 0;
+	background:url("/mysite_spring/assets/images/recycle.png") no-repeat 0 0;
 	font-size:0;
 }
+
 
 
 /*

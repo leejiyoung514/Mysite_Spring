@@ -45,7 +45,7 @@ public class GuestbookController {
 		map.put("password", password);
 		System.out.println("delete");
 		System.out.println("넘버출력" + no + " " + password);
-		int result = guestbookService.delete(map);
+		boolean result = guestbookService.delete(map);
 		System.out.println(result + "건 삭제");
 		return "redirect:/guestbook/list";
 	}
@@ -57,6 +57,12 @@ public class GuestbookController {
 		System.out.println(list.toString());
 		model.addAttribute("list", list);
 		return "guestbook/list";
+	}
+	
+	@RequestMapping(value="/list-ajax", method=RequestMethod.GET)
+	public String ajaxList() {
+		System.out.println("list-ajax");
+		return "guestbook/ajax-list";
 	}
 
 }

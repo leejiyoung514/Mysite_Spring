@@ -57,9 +57,6 @@ public class GalleryController {
 		UserVo authUser=(UserVo)session.getAttribute("authUser");
 		System.out.println(authUser.toString());
 		int user_no=authUser.getNo();
-		System.out.println(user_no);
-		System.out.println("gallery: upload form click");
-		System.out.println(file.toString());
 		System.out.println(file.getOriginalFilename());
 		int result=galleryService.restore(file, user_no);
 		System.out.println("업로드성공 건수: "+result);
